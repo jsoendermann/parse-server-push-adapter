@@ -108,6 +108,8 @@ APNS.prototype.send = function(data, devices) {
   let devicesPerConnIndex = {};
   // Start by clustering the devices per connections
   devices.forEach((device) => {
+    log.verbose(LOG_PREFIX, 'device ' + device);
+
     let qualifiedConnIndexs = chooseConns(this.conns, device);
     if (qualifiedConnIndexs.length == 0) {
       log.error(LOG_PREFIX, 'no qualified connections for %s %s', device.appIdentifier, device.deviceToken);
@@ -198,6 +200,9 @@ function chooseConns(conns, device) {
   let qualifiedConns = [];
   for (let index = 0; index < conns.length; index++) {
     let conn = conns[index];
+
+    log.verbose(LOG_PREFIX, 'device.appIdentifier: ' + device.appIdentifier + '; conn.bundleId: ' + conn.bundleId);
+
     // If the device we need to send to does not have
     // appIdentifier, any conn could be a qualified connection
     if (!device.appIdentifier || device.appIdentifier === '') {
